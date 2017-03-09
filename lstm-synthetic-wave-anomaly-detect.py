@@ -53,7 +53,7 @@ def gen_wave():
     wave3 = sin(10 * pi * t_rider)
     print("wave3", len(wave3))
     insert = round(0.8 * len(t))
-    wave1[insert:insert + 50] = wave1[insert:insert + 50] + wave3
+    wave1[(int)insert:(int)insert + 50] = wave1[(int)insert:(int)insert + 50] + wave3
     return wave1 + wave2
 
 
