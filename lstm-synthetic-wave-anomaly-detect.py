@@ -52,8 +52,8 @@ def gen_wave():
     t_rider = arange(0.0, 0.5, 0.01)
     wave3 = sin(10 * pi * t_rider)
     print("wave3", len(wave3))
-    insert = round(0.8 * len(t))
-    wave1[(int)insert:(int)insert + 50] = wave1[(int)insert:(int)insert + 50] + wave3
+    insert = int(round(0.8 * len(t)))
+    wave1[insert:insert + 50] = wave1[insert:insert + 50] + wave3
     return wave1 + wave2
 
 
@@ -71,7 +71,7 @@ def get_split_prep_data(train_start, train_end,
     print("Length of Data", len(data))
 
     # train data
-    print "Creating train data..."
+    print ("Creating train data...")
 
     result = []
     for index in range(train_start, train_end - sequence_length):
@@ -79,8 +79,8 @@ def get_split_prep_data(train_start, train_end,
     result = np.array(result)  # shape (samples, sequence_length)
     result, result_mean = z_norm(result)
 
-    print "Mean of train data : ", result_mean
-    print "Train data shape  : ", result.shape
+    print ("Mean of train data : ", result_mean)
+    print ("Train data shape  : ", result.shape)
 
     train = result[train_start:train_end, :]
     np.random.shuffle(train)  # shuffles in-place
@@ -89,7 +89,7 @@ def get_split_prep_data(train_start, train_end,
     X_train, y_train = dropin(X_train, y_train)
 
     # test data
-    print "Creating test data..."
+    print ("Creating test data...")
 
     result = []
     for index in range(test_start, test_end - sequence_length):
@@ -97,8 +97,8 @@ def get_split_prep_data(train_start, train_end,
     result = np.array(result)  # shape (samples, sequence_length)
     result, result_mean = z_norm(result)
 
-    print "Mean of test data : ", result_mean
-    print "Test data shape  : ", result.shape
+    print ("Mean of test data : ", result_mean)
+    print ("Test data shape  : ", result.shape)
 
     X_test = result[:, :-1]
     y_test = result[:, -1]
@@ -139,7 +139,7 @@ def build_model():
 
     start = time.time()
     model.compile(loss="mse", optimizer="rmsprop")
-    print "Compilation Time : ", time.time() - start
+    print ("Compilation Time : ", time.time() - start)
     return model
 
 
@@ -147,13 +147,13 @@ def run_network(model=None, data=None):
     global_start_time = time.time()
 
     if data is None:
-        print 'Loading data... '
+        print ('Loading data... ')
         # train on first 700 samples and test on next 300 samples (has anomaly)
         X_train, y_train, X_test, y_test = get_split_prep_data(0, 700, 500, 1000)
     else:
         X_train, y_train, X_test, y_test = data
 
-    print '\nData Loaded. Compiling...\n'
+    print ('\nData Loaded. Compiling...\n')
 
     if model is None:
         model = build_model()
@@ -169,7 +169,7 @@ def run_network(model=None, data=None):
         predicted = np.reshape(predicted, (predicted.size,))
     except KeyboardInterrupt:
         print("prediction exception")
-        print 'Training duration (s) : ', time.time() - global_start_time
+        print ('Training duration (s) : ', time.time() - global_start_time)
         return model, y_test, 0
 
     try:
@@ -187,8 +187,8 @@ def run_network(model=None, data=None):
         plt.show()
     except Exception as e:
         print("plotting exception")
-        print str(e)
-    print 'Training duration (s) : ', time.time() - global_start_time
+        print (str(e))
+    print ('Training duration (s) : ', time.time() - global_start_time)
 
     return model, y_test, predicted
 
